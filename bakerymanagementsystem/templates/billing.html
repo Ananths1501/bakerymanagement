@@ -1,0 +1,603 @@
+&lt;!DOCTYPE html>
+<html>
+<head>
+    <title>Sweet Delights Bakery - Billing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #ffa5a5;
+            --accent-color: #ffd166;
+            --text-color: #333;
+            --light-color: #fff;
+            --dark-color: #222;
+            --success-color: #06d6a0;
+            --error-color: #ef476f;
+            --warning-color: #ffd166;
+            --bg-color: #f8f9fa;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1612201142855-33503bb1bf41?q=80&w=1470&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        .header-btn:hover {
+            background-color: #ff5252;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .billing-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .billing-container {
+                flex-direction: column;
+            }
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #ff5252;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            font-weight: 600;
+            color: #555;
+            background-color: #f9f9f9;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .total-row {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: rgba(6, 214, 160, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(239, 71, 111, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    &lt;!-- Header -->
+    <div class="header">
+        <h1>Sweet Delights Bakery</h1>
+        <div class="header-actions">
+            <a href="/dashboard" class="header-btn"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="/home" class="header-btn"><i class="fas fa-home"></i> Home</a>
+        </div>
+    </div>
+
+    &lt;!-- Main Content -->
+    <div class="container">
+        <div id="alerts-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="billing-container">
+            <div class="left-panel">
+                <h2 class="panel-title">Customer Details</h2>
+                <div class="form-group">
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" placeholder="Enter customer name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number</label>
+                    <input type="text" id="customerPhone" placeholder="Enter phone number" required>
+                </div>
+
+                <h2 class="panel-title">Add Item to Bill</h2>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required onchange="loadItemsByCategory()">
+                        <option value="">Select Category</option>
+                        &lt;!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <select id="itemName" required onchange="updatePrice()">
+                        <option value="">Select Item</option>
+                        &lt;!-- Items will be loaded dynamically based on category -->
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" min="1" value="1" required onchange="updateItemTotal()">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price (per unit)</label>
+                        <input type="number" id="price" min="0" step="0.01" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="itemTotal">Item Total</label>
+                    <input type="number" id="itemTotal" readonly>
+                </div>
+                <button type="button" class="btn" onclick="addItem()">Add Item</button>
+            </div>
+
+            <div class="right-panel">
+                <h2 class="panel-title">Bill Details</h2>
+                <div class="table-responsive">
+                    <table id="billTable">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billList">
+                            &lt;!-- Bill items will be added dynamically -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="4" style="text-align: right;">Total Amount:</td>
+                                <td id="totalAmountValue">₹0.00</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="clearBill()">Clear Bill</button>
+                    <button class="btn" onclick="submitBill()">Generate Bill</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let billItems = [];
+        let totalAmount = 0;
+
+        // Load categories when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+        });
+
+        // Load categories from the server
+        function loadCategories() {
+            fetch('/get_categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categorySelect = document.getElementById('category');
+                    categorySelect.innerHTML = '<option value="">Select Category</option>';
+                    
+                    data.categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category;
+                        option.textContent = category;
+                        categorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                    showAlert('Error loading categories. Please try again.', 'error');
+                });
+        }
+
+        // Load items by selected category
+        function loadItemsByCategory() {
+            const category = document.getElementById('category').value;
+            if (!category) return;
+
+            fetch(`/get_items_by_category/${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    const itemSelect = document.getElementById('itemName');
+                    itemSelect.innerHTML = '<option value="">Select Item</option>';
+                    
+                    data.items.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.name;
+                        option.textContent = item.name;
+                        option.dataset.price = item.unit_price;
+                        itemSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading items:', error);
+                    showAlert('Error loading items. Please try again.', 'error');
+                });
+        }
+
+        // Update price when item is selected
+        function updatePrice() {
+            const itemSelect = document.getElementById('itemName');
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            
+            if (selectedOption && selectedOption.dataset.price) {
+                document.getElementById('price').value = selectedOption.dataset.price;
+                updateItemTotal();
+            } else {
+                document.getElementById('price').value = '';
+                document.getElementById('itemTotal').value = '';
+            }
+        }
+
+        // Update item total when quantity or price changes
+        function updateItemTotal() {
+            const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const total = quantity * price;
+            
+            document.getElementById('itemTotal').value = total.toFixed(2);
+        }
+
+        // Add item to the bill
+        function addItem() {
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const category = document.getElementById('category').value;
+            const itemName = document.getElementById('itemName').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const price = parseFloat(document.getElementById('price').value);
+            
+            // Validate inputs
+            if (!customerName || !customerPhone) {
+                showAlert('Please fill in customer details', 'error');
+                return;
+            }
+            
+            if (!category || !itemName || !quantity || !price) {
+                showAlert('Please fill in all item details', 'error');
+                return;
+            }
+            
+            // Add item to the bill items array
+            const item = {
+                itemName,
+                category,
+                quantity,
+                price
+            };
+            
+            billItems.push(item);
+            
+            // Update the bill display
+            displayBill();
+            
+            // Reset item form fields
+            document.getElementById('itemName').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('quantity').value = '1';
+            document.getElementById('itemTotal').value = '';
+            
+            // Show success message
+            showAlert('Item added to bill', 'success');
+        }
+
+        // Display the bill items in the table
+        function displayBill() {
+            const billList = document.getElementById('billList');
+            billList.innerHTML = '';
+            
+            totalAmount = 0;
+            
+            billItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                const itemNameCell = document.createElement('td');
+                itemNameCell.textContent = item.itemName;
+                row.appendChild(itemNameCell);
+                
+                const categoryCell = document.createElement('td');
+                categoryCell.textContent = item.category;
+                row.appendChild(categoryCell);
+                
+                const quantityCell = document.createElement('td');
+                quantityCell.textContent = item.quantity;
+                row.appendChild(quantityCell);
+                
+                const priceCell = document.createElement('td');
+                priceCell.textContent = `₹${parseFloat(item.price).toFixed(2)}`;
+                row.appendChild(priceCell);
+                
+                const total = item.price * item.quantity;
+                totalAmount += total;
+                
+                const totalCell = document.createElement('td');
+                totalCell.textContent = `₹${total.toFixed(2)}`;
+                row.appendChild(totalCell);
+                
+                const actionCell = document.createElement('td');
+                const removeButton = document.createElement('button');
+                removeButton.innerHTML = '<i class="fas fa-trash"></i>';
+                removeButton.style.border = 'none';
+                removeButton.style.background = 'none';
+                removeButton.style.color = '#ff6b6b';
+                removeButton.style.cursor = 'pointer';
+                removeButton.onclick = function() {
+                    removeItem(index);
+                };
+                actionCell.appendChild(removeButton);
+                row.appendChild(actionCell);
+                
+                billList.appendChild(row);
+            });
+            
+            document.getElementById('totalAmountValue').textContent = `₹${totalAmount.toFixed(2)}`;
+        }
+
+        // Remove an item from the bill
+        function removeItem(index) {
+            billItems.splice(index, 1);
+            displayBill();
+            showAlert('Item removed from bill', 'success');
+        }
+
+        // Clear the entire bill
+        function clearBill() {
+            billItems = [];
+            totalAmount = 0;
+            displayBill();
+            
+            // Reset customer details
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            
+            showAlert('Bill cleared', 'info');
+        }
+
+        // Submit the bill to the server
+        function submitBill() {
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            
+            if (!customerName || !customerPhone) {
+                showAlert('Please fill in customer details', 'error');
+                return;
+            }
+            
+            if (billItems.length === 0) {
+                showAlert('Please add at least one item to the bill', 'error');
+                return;
+            }
+            
+            // Prepare data for submission
+            const billData = {
+                customerName,
+                customerPhone,
+                billItems,
+                totalAmount
+            };
+            
+            // Submit the bill to the server
+            fetch('/submit_bill', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(billData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showAlert(data.message, 'success');
+                
+                // Redirect to the receipt page
+                window.location.href = `/bill_receipt/${data.bill_id}`;
+            })
+            .catch(error => {
+                console.error('Error submitting bill:', error);
+                showAlert('Error submitting bill. Please try again.', 'error');
+            });
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alerts-container');
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertsContainer.appendChild(alert);
+            
+            // Remove the alert after 3 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

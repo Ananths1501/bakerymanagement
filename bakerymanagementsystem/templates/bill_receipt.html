@@ -1,0 +1,257 @@
+&lt;!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Receipt - Sweet Delights Bakery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #ffa5a5;
+            --accent-color: #ffd166;
+            --text-color: #333;
+            --light-color: #fff;
+            --dark-color: #222;
+            --bg-color: #f8f9fa;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .receipt-header {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .receipt-header h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .receipt-header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .receipt-body {
+            padding: 30px;
+        }
+
+        .receipt-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .receipt-info div {
+            flex: 1;
+        }
+
+        .receipt-info h3 {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .receipt-info p {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            font-weight: 600;
+            color: #555;
+            background-color: #f9f9f9;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .total-row {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .receipt-footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .receipt-footer p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .receipt-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background-color: #ff5252;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        @media print {
+            .receipt-actions {
+                display: none;
+            }
+            
+            body {
+                padding: 0;
+                background-color: white;
+            }
+            
+            .receipt-container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="receipt-header">
+            <h1>Sweet Delights Bakery</h1>
+            <p>123 Baker Street, Sweetville, SV 12345</p>
+            <p>Phone: (123) 456-7890 | Email: info@sweetdelights.com</p>
+        </div>
+        
+        <div class="receipt-body">
+            <div class="receipt-info">
+                <div>
+                    <h3>Bill Information</h3>
+                    <p><strong>Bill #:</strong> {{ bill.id }}</p>
+                    <p><strong>Date:</strong> {{ bill.formatted_date }}</p>
+                </div>
+                <div>
+                    <h3>Customer Information</h3>
+                    <p><strong>Name:</strong> {{ bill.customer_name }}</p>
+                    <p><strong>Phone:</strong> {{ bill.customer_phone }}</p>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ "{:,.2f}".format(item.price) }}</td>
+                            <td>₹{{ "{:,.2f}".format(item.item_total) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="4" style="text-align: right;">Total Amount:</td>
+                            <td>₹{{ "{:,.2f}".format(bill.total_amount) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        <div class="receipt-footer">
+            <p>Thank you for your purchase!</p>
+            <p>We hope to see you again soon.</p>
+            
+            <div class="receipt-actions">
+                <button class="btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <a href="/billing" class="btn btn-secondary">
+                    <i class="fas fa-receipt"></i> New Bill
+                </a>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
